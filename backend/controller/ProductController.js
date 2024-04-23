@@ -1,9 +1,7 @@
 import Product from "../models/ProductModel.js";
 import path from "path";
 import fs from "fs";
-import { where } from "sequelize";
-import { request } from "http";
-import { timeStamp } from "console";
+
 //dapatkan product
 export const getProducts = async (req, res) => {
   try {
