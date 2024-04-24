@@ -1,5 +1,5 @@
-#How To run
-open terminal
+#How To run \
+open terminal 
 cd backend
 npm i
 node index.js
