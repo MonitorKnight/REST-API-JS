@@ -28,12 +28,12 @@ const EditProduct = () => {
 
   const updateProduct = async (e) => {
     e.preventDefault();
-    //menambahkan Form data yang ada dibody
+    //menambahkan Form data yang ada dibody seperti yang di postman/thunder client
     const formData = new FormData();
     formData.append("file", file);
     formData.append("title", title);
     try {
-      await axios.post(`http://localhost:5000/products/${id}`, formData, {
+      await axios.patch(`http://localhost:5000/products/${id}`, formData, {
         headers: {
           "Content-type": "multipart/form-data",
         },
