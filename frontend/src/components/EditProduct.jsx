@@ -26,14 +26,14 @@ const EditProduct = () => {
     setPreview(URL.createObjectURL(image));
   };
 
-  const SaveProduct = async (e) => {
+  const updateProduct = async (e) => {
     e.preventDefault();
     //menambahkan Form data yang ada dibody
     const formData = new FormData();
     formData.append("file", file);
     formData.append("title", title);
     try {
-      await axios.post("http://localhost:5000/products", formData, {
+      await axios.post(`http://localhost:5000/products/${id}`, formData, {
         headers: {
           "Content-type": "multipart/form-data",
         },
@@ -47,7 +47,7 @@ const EditProduct = () => {
   return (
     <div className="columns is-centered mt-5">
       <div className="column is-half">
-        <form onSubmit={SaveProduct}>
+        <form onSubmit={updateProduct}>
           <div className="field">
             <label className="label">Product Name</label>
             <div className="control">
