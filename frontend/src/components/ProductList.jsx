@@ -25,7 +25,7 @@ const ProductList = () => {
 
   return (
     <div className="container mt-5">
-      <Link className="button is-success" to="/add">
+      <Link className="button is-success addButton" to="/add">
         Add New
       </Link>
       <div className="columns is-multiline">
