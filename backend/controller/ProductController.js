@@ -5,6 +5,7 @@ import fs from "fs";
 //dapatkan product
 export const getProducts = async (req, res) => {
   try {
+    //mencari semua product
     const response = await Product.findAll();
     res.json(response);
   } catch (error) {
@@ -14,6 +15,7 @@ export const getProducts = async (req, res) => {
 //dapatkan product berdasarkan ID
 export const getProductById = async (req, res) => {
   try {
+    //method sequelize untuk mendaptakan satu berdasarkan...
     const response = await Product.findOne({
       where: {
         id: req.params.id,
@@ -24,16 +26,18 @@ export const getProductById = async (req, res) => {
     console.log(error.message);
   }
 };
-//simpan produk
+//simpan produk atau tambah
 export const saveProduct = (req, res) => {
+  //cek apa di body bagian files ada file
   if (req.files === null) {
     return res.status(400).json({ msg: "no file upload" });
   }
   const name = req.body.title;
   const file = req.files.file;
-  const fileSize = file.data.length;
-  const ext = path.extname(file.name);
-  const filename = file.md5 + Date.now() + ext; //md5 semacam hash untuk mengacak nama,date now agar lebih mengacak bila ad afile sama yang diupload
+  //const fileSize = file.data.length; //bisa menggunakan ini dan lebih umum
+  const fileSize = file.data.length; //mengambil ukuran file
+  const ext = path.extname(file.name); //mereturn extension sebuah file misal .jpg , .png
+  const filename = file.md5 + Date.now() + ext; //md5 semacam hash untuk mengacak nama,date now agar lebih mengacak bila ada file sama yang diupload
   const url = `${req.protocol}://${req.get("host")}/img/${filename}`; //req.get("host") agar sesuai dengan hostingan
   const allowedType = [".png", ".jpg", ".jpeg"];
 
@@ -45,7 +49,8 @@ export const saveProduct = (req, res) => {
   if (fileSize > 5000000 /*byte*/)
     return res.status(422).json({ msg: "Image must less than 5 MB" });
 
-  //memindahkan file ke folder public
+  //memindahkan file ke folder public/img
+  //file.mv() adalah metode untuk memindahkan file yang diunggah ke lokasi tujuan yang baru.
   file.mv(`./public/img/${filename}`, async (err) => {
     if (err) return res.status(500).json({ msg: err.message });
 
@@ -58,20 +63,22 @@ export const saveProduct = (req, res) => {
     }
   });
 };
-
+//edit pruduct
 export const updateProduct = async (req, res) => {
   //menangkap product
   const product = await Product.findOne({
     where: {
-      id: req.params.id,
+      id: req.params.id, //bedsarkan route web idnya
     },
   });
   //mengecek product ada atau tidak
   if (!product) return res.status(404).json({ msg: "Product Not Found" });
   let filename = "";
-  //mengedit tanpa merubah
-  if (req.files === null) {
-    filename = Product.image;
+
+  //mengedit tanpa merubah gambar
+  //bisa juga dengan === null
+  if (!req.files || !req.files.file) {
+    filename = product.image;
   } else {
     const file = req.files.file;
     const fileSize = file.data.length;

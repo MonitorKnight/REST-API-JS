@@ -3,7 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 
 const ProductList = () => {
-  const [product, Setproduct] = useState([]);
+  const [product, Setproduct] = useState([]); // State untuk menyimpan daftar tugas
 
   useEffect(() => {
     getProducts();
@@ -11,7 +11,7 @@ const ProductList = () => {
 
   const getProducts = async () => {
     const response = await axios.get("http://localhost:5000/products");
-    Setproduct(response.data);
+    Setproduct(response.data); //hasil
   };
 
   const DeleteProduct = async (productId) => {
